@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Enregistrement du message receptionné</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[Fe=96000;
+T=10;
+%[message,Signal,t]=RecordModulation(Fe,T); %enregistrement du signal reçu
+
+%load audio_test_module.mat;
+
+figure(1)
+subplot(2,2,1)
+plot(t,Signal)
+title('Signal modulé reçu x(t)')
+xlabel('temps en secondes')
+ylabel('amplitude')]]></w:t></w:r></w:p><w:p><w:pPr><w:sectPr/></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Démodulation synchrone</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[v0=3000; %fréquence de la porteuse étudiée
+
+[mod,f] = TransFourier(Signal,t); %Ttransformée de Fourier du signal reçu
+subplot(2,2,2)
+plot(f,abs(mod).^2);
+title('TF du signal modulé |X(f)|²');
+xlabel('fréquence en Hz')
+ylabel('amplitude')
+
+signalDemod = Signal.*cos(2*pi*v0*t); %Démodulation synchrone sans porteuse
+                                      %du signal reçu
+[Demod,f] = TransFourier(signalDemod,t); %Transformée de Fourier du signal
+                                         %demodulé
+%plot(f,abs(Demod).^2);
+%title('TF du signal démodulé |Y(f)|²');
+
+Fc=1000; %fréquence de coupure
+
+[s] = PasseBas(signalDemod,Fe,Fc); %filtrage passe-bas
+
+subplot(2,2,3)
+plot(t,s);
+title('Signal demodulé filtré x(t)');
+xlabel('temps en secondes')
+ylabel('amplitude')
+
+[demodTF, f2] = TransFourier(s,t);
+subplot(2,2,4)
+plot(f2,abs(demodTF).^2);
+title('Signal démodulé filtré |Y(f)|²');
+xlabel('fréquence en Hz')
+ylabel('amplitude')
+
+soundsc(s,Fe)]]></w:t></w:r></w:p><w:p><w:pPr><w:sectPr/></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Demodulation BLU</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[tBLU = (-5000:1/96:5000-1/960);
+
+unitstep1 = tBLU>=v0;
+unitstep2 = tBLU<=-v0;
+
+s1 = unitstep1'.*Signal;
+s2 = unitstep2'.*Signal;
+
+s1=s1.*cos(2*pi*v0*t);
+s2=s2.*cos(2*pi*v0*t);
+
+figure(2)
+plot(tBLU, s1)
+plot(tBLU, s2)
+
+[Demod1,f] = TransFourier(s1,t);
+figure(3)
+plot(f,abs(Demod).^2);]]></w:t></w:r></w:p></w:body></w:document>
