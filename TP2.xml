@@ -20,7 +20,12 @@ plot(t,y)
 title('Signal émis x (en bleu) et signal reçu y (en rouge)')
 xlabel('t (en secondes)')
 ylabel('y(t)')
-xlim([0 D])]]></w:t></w:r></w:p><w:p><w:pPr><w:sectPr/></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Fonction d'inter-corrélation</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Il faut normaliser par 1/Fs pour avoir une intégrale et non pas des rectangles</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>k représente le retard entre les signaux y(t) et x(t)</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[[r,lags] = xcorr(y,x);
+xlim([0 D])
+
+Fonction d'inter-corrélation
+Il faut normaliser par 1/Fs pour avoir une intégrale et non pas des rectangles
+k représente le retard entre les signaux y(t) et x(t)
+[r,lags] = xcorr(y,x);
 r=(1/Fs)*r;
 lags=(1/Fs)*lags;
 
@@ -29,8 +34,24 @@ plot(lags,r)
 title('Fonction intercorrélation')
 xlabel('tau0')
 ylabel('amplitude')
-axis([0 2 -0.4 0.4])]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Fréquence des oscillations : En mesurant avec les curseurs, on obtient une fréquence de 7Hz. On retrouve bien la fréquence f0.</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>On a une pente décroissante de -0.5 qui correspond à la pente décroissante de la fonction théorique. </w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Le support de la fonction est compacte car la fonction d'intercorrélation a une fonction triangle en facteur, fonction qui est elle-même compacte.</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Max de intercorr(y,x) : 0.3568</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>La valeur maximale de la fonction d'intercorrélation de (y,x) correspond à l'énergie du signal x car intercorr(y,x) à tau=0 vaut A^2*T/2</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[[m,i]=max(r);
-to0=lags(i);]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>to0 est le temps de propagation.</w:t></w:r></w:p><w:p><w:pPr><w:sectPr/></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Signal avec un média bruité</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[sigma=10;
+axis([0 2 -0.4 0.4])
+
+Fréquence des oscillations : En mesurant avec les curseurs, on obtient une fréquence de 7Hz.
+On retrouve bien la fréquence f0.
+On a une pente décroissante de -0.5 qui correspond à la pente décroissante de la fonction théorique.
+Le support de la fonction est compacte car la fonction d'intercorrélation a une fonction triangle en facteur, fonction qui est elle-même compacte.
+Max de intercorr(y,x) : 0.3568
+La valeur maximale de la fonction d'intercorrélation de (y,x) correspond à l'énergie du signal x car intercorr(y,x) à tau=0 vaut A^2*T/2
+
+[m,i]=max(r);
+to0=lags(i);
+
+to0 est le temps de propagation.
+
+Signal avec un média bruité
+
+sigma=10;
+
 z = y+sigma*randn(size(y));
 
 figure(3)
@@ -39,7 +60,12 @@ plot(t, x)
 plot(t, z)
 title('Signal bruité z et signal émis x')
 xlabel('t (en secondes)')
-ylabel('z(t) et x(t)')]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t> Fonction d'inter-corrélation entre z et x</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[[r2,lags2] = xcorr(z,x);
+ylabel('z(t) et x(t)')
+
+ 
+Fonction d'inter-corrélation entre z et x
+
+[r2,lags2] = xcorr(z,x);
 r2=(1/Fs)*r2;
 lags2=(1/Fs)*lags2;
 
@@ -47,11 +73,18 @@ figure(4)
 plot(lags2,r2)
 title('Fonction intercorrélation z et x')
 xlabel('tau0')
-ylabel('amplitude')]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>inter-corr entre z et x = inter-corr entre y+b et x (car z = y+b avec y le signal reçu sans bruit et b le bruit) = inter-corr entre y et x + inter-corr entre b et x</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>C'est pour cela que l'on retrouve une fonction d'inter-corrélation entre z et x qui ressemble à celle entre y et b mais elle est différente car on ajoute une fonction d'inter-corrélation entre b et x</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[[m2,i2]=max(r2);
+ylabel('amplitude')
+]
+inter-corr entre z et x = inter-corr entre y+b et x (car z = y+b avec y le signal reçu sans bruit et b le bruit) = inter-corr entre y et x + inter-corr entre b et x
+C'est pour cela que l'on retrouve une fonction d'inter-corrélation entre z et x qui ressemble à celle entre y et b mais elle est différente car on ajoute une fonction d'inter-corrélation entre b et x
+
+[m2,i2]=max(r2);
 to0
 to1=lags2(i2)
 
-erreur=abs(to0-to1)/to0*100]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Le temps de propagation avec le bruit est très différent de celui sans bruit.</w:t></w:r></w:p><w:p><w:pPr><w:sectPr/></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Echo</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[deltaF=0.13*f0;
+erreur=abs(to0-to1)/to0*100]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>
+Le temps de propagation avec le bruit est très différent de celui sans bruit.</w:t></w:r></w:p><w:p><w:pPr><w:sectPr/></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Echo</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[
+deltaF=0.13*f0;
 p3 = abs((t-tau0-T/2)/T)<1/2;
 w = cos(2*pi*(f0+deltaF)*(t-tau0)).*p3;
 
@@ -61,7 +94,9 @@ plot(t,x)
 plot(t,w)
 title('Signal émis x et écho w')
 xlabel('t (en secondes)')
-ylabel('x(t) et w(t)')]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Fonction d'inter-corrélation entre w et x</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[[r3,lags3] = xcorr(w,x);
+ylabel('x(t) et w(t)')]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>
+Fonction d'inter-corrélation entre w et x</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[
+[r3,lags3] = xcorr(w,x);
 r3=(1/Fs)*r3;
 lags3=(1/Fs)*lags3;
 
@@ -75,7 +110,17 @@ axis([0 2 -0.2 0.2])
 [m3,i3]=max(r3);
 to3=lags3(i3);
 
-erreur=abs(to0-to3)/to0*100;]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Le temps de propagation estimé à partir de la fonction d'inter-corrélation entre w et x est très différente de celle théorique, en effet, on trouve une erreur de 21%</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Avec 4 périodes de T0, on obtient une valeur satisfaisante pour le temps de propagation obtenue (erreur de 4% avec celui théorique). On a choisi 4 périodes et non pas moins de périodes afin d'essayer de rendre le bruit le plus négligeable possible tout en ayant une valeur de temps de propagation acceptable par rapport à celle théorique. En effet, en augmentant le nombre de périodes de T0, on diminue l'influence du bruit jusqu'à le rendre négligeable alors qu'en diminuant le nombre de périodes, on a un temps de propagation plus acceptable. On fait un compromis.</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Densité inter-spectrale d'énergie entre w et x</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[[S,f] = TransFourier(r3,lags3);
+erreur=abs(to0-to3)/to0*100;]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>
+Le temps de propagation estimé à partir de la fonction d'inter-corrélation entre w et x est très différente de celle théorique, en effet, on trouve une erreur de 21%
+</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>
+Avec 4 périodes de T0, on obtient une valeur satisfaisante pour le temps de propagation obtenue (erreur de 4% avec celui théorique). 
+On a choisi 4 périodes et non pas moins de périodes afin d'essayer de rendre le bruit le plus négligeable possible tout en ayant une 
+valeur de temps de propagation acceptable par rapport à celle théorique. En effet, en augmentant le nombre de périodes de T0, on diminue 
+l'influence du bruit jusqu'à le rendre négligeable alors qu'en diminuant le nombre de périodes, on a un temps de propagation plus acceptable. On fait un compromis.</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>
+
+Densité inter-spectrale d'énergie entre w et x</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[
+
+[S,f] = TransFourier(r3,lags3);
 
 figure(7)
 plot(f, real(S))
