@@ -9,7 +9,10 @@ figure(1)
 plot(t,p)
 title('Signal p')
 xlabel('t(s)')
-ylabel('p(t)')]]></w:t></w:r></w:p><w:p><w:pPr><w:sectPr/></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Transformée de Fourier</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[[P,f] = TransFourier(p,t);
+ylabel('p(t)')
+
+%Transformée de Fourier
+[P,f] = TransFourier(p,t);
 
 u = 1./(f.^2);
 
@@ -20,21 +23,47 @@ plot(f,real(P));
 plot(f,u)
 
 axis([-10 10 -0.5 2])
-title('Re(P(f))')
-xlabel('f(Hz)')
-ylabel('Re(P(f))')
+title(Re(P(f)))
+xlabel(f(Hz))
+ylabel(Re(P(f)))
 subplot(122);
 plot(f,imag(P));
-title('Im(P(f))')
-xlabel('f(Hz)')
-ylabel('Im(P(f))')]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Le signal p est paire (car la fonction porte est elle-même paire). Or, une fonction paire en Fourier n'est pas complexe (Partie imaginaire nulle).</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>P(f) est complexe car Matlab utilise une approximation de la transformée de Fourier (approximation des trapèzes) : c'est pourquoi la partie imaginaire de P(f) n'est pas nulle mais très petite (10^-16)</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>On relève 1.995 en amplitude maximale soit environ T. Cela s'explique par la théorie avec la formule du changement d'échelle, la transformée de Fourier à l'origine est égale à AT (sinc(fT) = 0 car f = 0, A est l'amplitude de p soit 1) soit 1*2 = 2. La valeur relevée est bien cohérente avec la théorie.</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Pour la période, avec le module au carré de P, on relève f1 = -0.5497 Hz et f2 = -1.049 Hz soit deltaf = 0.4493 Hz . Cela s'explique par le changement d'échelle avec T = 2 s, on a bien 1/T = 0.5 Hz. La valeur relevée est bien cohérente avec la théorie.</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t/></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>La décroissance correspond à une courbe de 1./(f.^2)</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>La bande spectrale est finie car on a une fonction porte.</w:t></w:r></w:p><w:p><w:pPr><w:sectPr/></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Densité spectrale d'énergie du signal p</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[Gamma = abs(P).^2;
+title(Im(P(f)))
+xlabel(f(Hz))
+ylabel(Im(P(f))
+%Le signal p est paire (car la fonction porte est elle-même paire). 
+%Or, une fonction paire en Fourier n'est pas complexe (Partie imaginaire nulle).
+%P(f) est complexe car Matlab utilise une approximation de la transformée de Fourier 
+%(approximation des trapèzes) : c'est pourquoi la partie imaginaire de P(f) n'est pas nulle mais très petite (10^-16)
+
+%On relève 1.995 en amplitude maximale soit environ T. Cela s'explique par la théorie avec la formule du changement d'échelle,
+%la transformée de Fourier à l'origine est égale à AT (sinc(fT) = 0 car f = 0, A est l'amplitude de p soit 1) soit 1*2 = 2. 
+%La valeur relevée est bien cohérente avec la théorie.
+
+%Pour la période, avec le module au carré de P, on relève f1 = -0.5497 Hz et f2 = -1.049 Hz soit deltaf = 0.4493 Hz .
+Cela s'explique par le changement d'échelle avec T = 2 s, on a bien 1/T = 0.5 Hz. La valeur relevée est bien cohérente avec la théorie.
+
+La décroissance correspond à une courbe de 1./(f.^2)
+La bande spectrale est finie car on a une fonction porte.
+
+%Densité spectrale d'énergie du signal p
+
+Gamma = abs(P).^2;
 
 figure(3)
 plot(f, Gamma)
 axis([-5 5 -0.5 +inf])
 title('Densité spectrale energie')
 xlabel('f(Hz)')
-ylabel('abs(P(f)²')]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Pour le lobe primaire, on a 0.4498 Hz et la valeur théorique est 1/T = 0.5 Hz</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Pour le 1er lobe secondaire, on a 0.9495 Hz et la valeur théorique est 2/T = 1 Hz</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Pour le 2eme lobe secondaire, on a 1.449 Hz et la valeur théorique est 3/T = 1.5 Hz</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Pour le 3eme lobe secondaire, on a 1.949 Hz et la valeur théorique est 4/T = 2 Hz</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Les valeurs expérimentales sont cohérentes avec les valeurs théoriques.</w:t></w:r></w:p><w:p><w:pPr><w:sectPr/></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Signal p(t-t0)</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[retard = 2;
+ylabel('P(f)^2')
+Pour le lobe primaire, on a 0.4498 Hz et la valeur théorique est 1/T = 0.5 Hz
+Pour le 1er lobe secondaire, on a 0.9495 Hz et la valeur théorique est 2/T = 1 Hz
+Pour le 2eme lobe secondaire, on a 1.449 Hz et la valeur théorique est 3/T = 1.5 Hz
+Pour le 3eme lobe secondaire, on a 1.949 Hz et la valeur théorique est 4/T = 2 Hz
+Les valeurs expérimentales sont cohérentes avec les valeurs théoriques.
+
+%Signal p(t-t0)
+retard = 2;
 
 p2= abs((t-retard)/T)<1/2;
 
@@ -69,9 +98,15 @@ plot(f,imag(P));
 plot(f,imag(P2));
 legend('P', 'Pt0');
 axis([-10 10 -0.5 +inf])
-title('Im(P(f)) et Im(Pt0(f))')
+title('Im(P(f) et Im(Pt0(f))')
 xlabel('f(Hz)')
-ylabel('Im(P(f)) et Im(Pt0(f))')]]></w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Le signal Pt0(f) ne devrait pas être réelle car avec la formule de translation, on obtient un exp(-2*i*pi*f*t) ce qui fait que la partie réelle doit être nulle.</w:t></w:r></w:p><w:p><w:pPr><w:sectPr/></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="text"/></w:pPr><w:r><w:t>Signal pA(t)</w:t></w:r></w:p><w:p><w:pPr><w:pStyle w:val="code"/></w:pPr><w:r><w:t><![CDATA[echelle = 2;
+ylabel('Im(P(f)) et Im(Pt0(f))')
+
+Le signal Pt0(f) ne devrait pas être réelle car avec la formule de translation, on obtient un exp(-2*i*pi*f*t) ce qui fait que la partie réelle doit être nulle.
+
+Signal pA(t)
+
+echelle = 2;
 
 p3= abs(echelle*(t/T))<1/2;
 
@@ -79,4 +114,4 @@ figure(6)
 plot(t,p3)
 title('Signal pA')
 xlabel('t(s)')
-ylabel('p3(t)')]]></w:t></w:r></w:p></w:body></w:document>
+ylabel('p3(t)')
